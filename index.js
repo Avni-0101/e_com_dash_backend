@@ -196,7 +196,8 @@ function verifyToken(req, resp, next) {
     }
 }
 
-const PORT = 5000; // localhost port definition
+const PORT = process.env.PORT || 5000; // Default to 5000 for local development
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
