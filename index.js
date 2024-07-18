@@ -159,16 +159,19 @@ app.put("/product/:id", verifyToken, async (req, res) => {
 // Search products
 app.get("/search/:key", verifyToken, async (req, res) => {
     try {
+        const userId = req.user.id;
         let result = await Product.find({
+            userID: userId, // Ensure products are filtered by the user's ID
             "$or": [
-                { name: { $regex: req.params.key } },
-                { company: { $regex: req.params.key } },
-                { category: { $regex: req.params.key } },
-            ],
+                { name: { $regex: req.params.key, $options: 'i' } },
+                { company: { $regex: req.params.key, $options: 'i' } },
+                { category: { $regex: req.params.key, $options: 'i' } }
+            ]
         });
         res.send(result);
     } catch (error) {
         console.log("ERROR");
+        res.status(500).send({ result: "Internal Server Error" });
     }
 });
 
